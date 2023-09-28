@@ -188,14 +188,21 @@ def search(request):
     user_ = User.objects.get(username = request.session["username"])
     for user in users:
         similarity = len(query.intersection(set(user.username.lower()))) / len(query.union(set(user.username.lower())))
-        if int(similarity*100) >= 50 and user != user_:
+        if int(similarity*100) > 0 and user != user_:
             friendship = Friendship.objects.filter(creator = user, following = user_)
             notification = Notification.objects.filter(user = user, user_from = user_, notification_type = "Friend Request")
             if not friendship:
                 avatar = AvatarModel.objects.get(user = user)
                 user_tuple = (user.username, avatar.avatar_id[5:-2],len(notification) > 0)
-                users_match.append(user_tuple)
-    print(users_match)
+                users_match.append([user_tuple,int(similarity*100)])
+    
+    for i in range(len(users_match)):
+        for h in range(i+1,len(users_match)):
+            if users_match[i][1] < users_match[h][1]:
+                aux = users_match[i]
+                users_match[i] = users_match[h]
+                users_match[h] = aux
+        users_match[i] = users_match[i][0]
     return render(request, 'chat/search.html', context = {
         'users_match' : users_match
     })
