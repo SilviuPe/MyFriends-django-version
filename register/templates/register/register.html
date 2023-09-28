@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+
+{% block content_page %}
+<style>
+    label,span {
+        color: white;
+        margin-top: 15px;
+    }
+    input {
+        background-color: gray;
+        border: solid 1px white;
+        border-spacing: 10px;
+        border-radius: 5%;
+        color:white;
+    }
+    input:focus {
+        outline: none;
+    }
+    button {
+        width: 200px;
+    }
+</style>
+{% if Errors %}
+    <style>
+        .error {
+            font-size: 20px;
+            color: white;
+        }
+        .error_message {
+            color:white;
+            font-size: 20px;
+        }
+    </style>
+    <div class = "container d-flex justify-content-center mt-5">
+        <p class = "error_message">Your registration try failed. The following error occured:</p>
+    </div>
+    <div class = "container d-flex justify-content-center mt-4">
+        <ul>
+            {% for error in Errors %}
+                <li class = "error">{{error}}</li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+{% endif %}
+<form class = "mt-5" action = "/register/" method = "POST">
+    {% csrf_token %}
+    <div class = "container d-flex justify-content-center flex-column" style = "width:300px">
+        {{ reg_form }}
+    </div>
+    <div class = "container d-flex justify-content-center">
+        <button class = "btn btn-dark mt-4" type = "submit" >Register</button>
+    </div>
+</form>
+
+{% endblock %}

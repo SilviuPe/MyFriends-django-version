@@ -1,0 +1,107 @@
+{% extends 'chat/navigation.html' %}
+{% load static %}
+
+
+{% block content_page %}
+
+<style>
+.button_friend {
+    border-radius: 100%;
+    height: 40px;
+    width: 40px;
+    background-size: cover;
+    background-color: gray;
+    color: white;
+    border: 1px solid white;
+}
+.username_friend {
+    text-align: center;
+    color: white;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.text_input {
+    background-color: rgb(85, 85, 85);
+    border:solid 2px gray;
+    border-radius: 5px;
+    color: white;
+    resize: none;
+    height: 70%; 
+    width: 100%;
+    outline: none;
+    padding-left: 10px;
+    padding-top: 4px;
+}
+.send_message_button {
+    width: 100%;
+    height:70%;
+    border:solid 1px gray;
+    border-radius: 5px;
+    color:white;
+    background-color: rgb(88, 88, 88);
+    font-size: 20px;
+    padding-bottom: 2.5px;
+}
+.message_page {
+    border-radius: 5px;
+    padding:3%;
+    width: 80%;
+    height: 350px; 
+    background-color: rgb(77, 77, 77);
+    border:solid 3px gray;
+}
+.friends_images {
+    border-radius: 5px;
+    border: 2px solid rgb(77, 77, 77);
+}
+/* width */
+.text_input::-webkit-scrollbar,.message_page::-webkit-scrollbar {
+    width: 5px;
+}
+    
+/* Handle */
+.text_input::-webkit-scrollbar-thumb,.message_page::-webkit-scrollbar-thumb {
+    background: rgb(70, 70, 70);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.text_area::-webkit-scrollbar-thumb:hover,.message_page::-webkit-scrollbar-thumb:hover {
+    background:  rgb(48, 48, 48);
+}
+</style>
+<div class = "friends_list continer">
+    <div class="row friends_images">
+        {% for friend , avatar_url in friend_list.items %}
+        <div class="col d-flex justify-content-center">
+            <div class = "row d-flex justify-content-center mt-3">
+                <button class = "button_friend" style = "background-image: {{avatar_url}}" name = "{{friend}}"></button>
+                <p class = "username_friend">{{friend}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div class = "col chat_section">
+        <div class = "row d-flex justify-content-center">
+            <div class = "overflow-auto mt-1 message_page">
+            </div>
+            <div class = "container mt-1" style = "width: 80%;">
+                <div class = "row">
+                    <div class = "col-11 ps-0 pe-1">
+                        <textarea class = "text_input" style = "height: 70%; width: 100%" placeholder="type here..."></textarea>
+                    </div>
+                    <div class = "col-1 p-0">
+                        <button class = "send_message_button">>>></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<script src = "{% static 'js/friends.js' %}"></script>
+
+{% endblock %}

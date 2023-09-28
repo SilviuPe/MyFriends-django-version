@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load static %}
+<html>
+    <head>
+        <title>MyFriends</title>
+    </head>
+
+
+    <style>
+        .nav {
+            background-color: rgb(51, 51, 51);
+            border-radius: 5px;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover,
+        .nav-link:active {
+            color: gray;
+        }
+        .nav-link:focus {
+            outline: none; /* Remove focus outline */
+            color: white;
+        }
+        .nav-link
+        a {
+            font-size: 20px;
+            color: white;
+        }
+        body, html {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-image: linear-gradient(rgb(30,30,30),rgb(80,80,80));
+            background-repeat: no-repeat;
+        }
+        .logo {
+            width: 120px;
+        }
+        .footer_contacts {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        a.footer_contacts:hover {
+            color: gray;
+        }
+        .footer_container {
+            background-color: gray;
+            height: 70px;
+        }
+        
+    </style>
+    <body>
+        <div class = "mt-3">  
+            <ul class="nav pb-1">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/register/">Register</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/login/">Login</a>
+                </li>
+              </ul>
+        </div>
+        <div class = "container mt-5 d-flex justify-content-center">
+            <img class = "logo" src = "{%  static 'main/logo.png' %}">
+        </div>
+        <script>
+            var logo = document.getElementsByClassName('logo')[0];
+            logo.onclick = function() {
+                window.location.href = "/"
+            }
+        </script>
+
+        {% block content_page %}
+
+
+
+        {% endblock %}
+        <div class = "footer_container mt-5 mb-2 d-flex justify-content-center align-items-center">
+            <div class = "container ">
+                <footer>
+                    <div class = " d-flex justify-content-center align-items-center">
+                        <a href = "https://github.com/SilviuPe" class = "footer_contacts me-3"> Github</a> 
+                        <a href = "https://instagram.com/just.python" class = "footer_contacts me-3"> Instagram</a>
+                    </div>
+                    <div class = " d-flex justify-content-center align-items-center mt-1">
+                        <p class = "footer_contacts m-0">silviu.petrea88@yahoo.com</p>
+                    </div>
+                </footer>
+            </div>  
+        </div>
+        
+    </body>
+</html>

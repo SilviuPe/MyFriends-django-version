@@ -1,0 +1,25 @@
+{% extends 'chat/navigation.html' %}
+
+{% block content_page %}
+<style>
+    .welcome-text {
+        color:rgb(255, 255, 255);
+        font-size: 24;
+    }
+    #logo {
+        width: 150px;
+        height: 150px;
+        border-radius: 100%;
+    }
+</style>
+<div class = "container d-flex justify-content-center mt-5">
+        <img id = "logo" src = "{{avatar_id}}">
+</div>
+<div class = "container d-flex justify-content-center mt-5">
+    <div class = "container d-flex flex-column text-center">
+        <p class = "welcome-text"> Hello {{request.session.username}}! Welcome to our community! </p> 
+        <p class = "welcome-text">There you can see our last updates!</p>
+    </div>
+</div>
+
+{% endblock %}

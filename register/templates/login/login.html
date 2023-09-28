@@ -1,0 +1,75 @@
+{% extends 'main/base.html' %}
+
+{% block content_page %}
+<style>
+    .login_form {
+        width:400px;
+    }
+    label {
+        color: white;
+        font-size: 24px;
+    }
+    input {
+        background-color: gray;
+        border: solid 1px white;
+        border-spacing: 10px;
+        border-radius: 5%;
+        color:white;
+    }
+    p {
+        display: flex;
+        flex-direction: column;
+        margin-top: 50px;
+    }
+    .error_message {
+        font-size: 18px;
+        color: white;
+    }
+    .registration_message_success {
+        color: white;
+        font-size: 18px;
+    }
+</style>
+<div class = "container login_form mt-5">
+    <div class = "container d-flex justify-content-center mt-5">
+        <div class = "container d-flex flex-column text-center">
+            <p class = "registration_message_success">
+                {% if registration %}
+                    Your account was succesfully created! 
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <form action = "/login/" method = "POST">
+        {% csrf_token %}
+        <div class = "container d-flex justify-content-center mt-5">
+            <div class = "container d-flex flex-column text-center">
+                <div class = "container">
+                    {{ login_form.email.label_tag }}
+                </div>
+                <div class = "container mt-2" name = "email">
+                    {{ login_form.email }}
+                </div>
+                <div class = "container mt-4">
+                    {{ login_form.password.label_tag }}
+                </div>
+                <div class = "container mt-2" name = "password">
+                    {{ login_form.password }}
+                </div>
+            </div>
+        </div>
+        <div class = "container d-flex justify-content-center">
+            <button class = "btn btn-dark mt-4" type = "submit" >Login</button>
+        </div>
+        <div class = "container d-flex align-items-center text-center mt-2">
+            <p class = "error_message">
+                {% if error %}
+                    {{error}}
+                {% endif %}
+            </p>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

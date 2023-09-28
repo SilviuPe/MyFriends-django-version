@@ -1,0 +1,40 @@
+{% extends "main/base.html" %}
+
+{% block content_page %}
+    <style>
+        .description {
+            margin-top: 100px;
+            color: white;
+        }
+        .descriptive_words {
+            font-size: 20px;
+            color: white;   
+        }
+        .video_presentation {
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+    <div class = "container description d-flex flex-column justify-content-center text-center">
+        <h2 class = "mb-5">
+            Welcome to MyFriends!<br>
+        </h2>
+        <p class = "descriptive_words">
+            We have our application first developed in Python using KivyMD Framework <br>
+            Here you can see
+        </p>
+    </div>
+    <div class = "container d-flex justify-content-center mt-5">
+     <iframe class = "video_presentation"
+            src = "https://www.youtube.com/embed/YWB0vSIvgrg" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+    <div class = "container d-flex justify-content-center mt-5">
+        <p class = "descriptive_words">
+            But to be more accessible for everyone MyFriends team decided to move this application on web.
+        </p>
+    </div>
+
+{% endblock %}

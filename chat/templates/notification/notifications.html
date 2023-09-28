@@ -1,0 +1,65 @@
+{% extends 'chat/navigation.html' %}
+{% load static %}
+
+
+{% block content_page %}
+<style>
+    .notification {
+        background-color: rgb(88, 88, 88);
+        border-radius: 5px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+    }
+    .notification p {
+        color: white;
+    }
+    .notification p .seen {
+        color:lime;
+        font-weight: 700;
+    }
+    .notification p .type {
+        color: rgb(0, 0, 0);
+        font-weight: 700;
+    }
+    .notification button {
+        height: 20px;
+        line-height: 0px;
+        text-align: start;
+        font-size: small;
+    }
+    .notification button:active {
+        outline:none;
+        border: none;
+    }
+</style>
+<div class = "container">
+    <div class = "col">
+        {% for from, type, message, seen, id in notifications_list %}
+            <div class = "row mt-2">
+                <div class = "notification {{id}}">
+                    {% if seen == true %}
+                        {% if type == "Message" %}
+                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
+                        {% elif type == "Friend Request" %}
+                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
+                            <button>accept</button>
+                            <button>decline</button>
+                        {% endif %}
+                        {% else %}
+                            {% if type == "Message" %}
+                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
+                        {% elif type == "Friend Request" %}
+                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
+                            <button class = "btn btn-success mb-3 mx-2">accept</button>
+                            <button class = "btn btn-danger mb-3 mx-2">decline</button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script src = "{% static 'js/notifications.js' %}"></script>
+
+{% endblock %}
