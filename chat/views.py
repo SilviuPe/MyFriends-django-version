@@ -188,13 +188,37 @@ def search(request):
     user_ = User.objects.get(username = request.session["username"])
     for user in users:
         similarity = len(query.intersection(set(user.username.lower()))) / len(query.union(set(user.username.lower())))
-        if int(similarity*100) >= 50:
+        if int(similarity*100) >= 50 and user != user_:
             friendship = Friendship.objects.filter(creator = user, following = user_)
+            notification = Notification.objects.filter(user = user, user_from = user_, notification_type = "Friend Request")
             if not friendship:
                 avatar = AvatarModel.objects.get(user = user)
-                user_tuple = (user.username, avatar.avatar_id[5:-2])
+                user_tuple = (user.username, avatar.avatar_id[5:-2],len(notification) > 0)
                 users_match.append(user_tuple)
     print(users_match)
     return render(request, 'chat/search.html', context = {
         'users_match' : users_match
     })
+    
+    
+def friend_request_notification(request):
+    if request.GET.get('friend_request_sent') == "true":
+        user = User.objects.get(username = request.GET.get('username'))
+        user_from = User.objects.get(username = request.session['username'])
+        Notification.objects.create(
+            user = user,
+            user_from = user_from,
+            notification_type = "Friend Request",
+            message = str()
+        )
+        return HttpResponse("Friend Request Sent")
+    else:
+        user = User.objects.get(username = request.GET.get('username'))
+        user_from = User.objects.get(username = request.session['username'])
+        notification = Notification.objects.get(
+            user = user,
+            user_from = user_from,
+            notification_type = "Friend Request"
+        )
+        notification.delete()
+        return HttpResponse("Friend Request Deleted")

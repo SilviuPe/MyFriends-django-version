@@ -120,8 +120,6 @@ function request_messages(from_who,updateing = false) {
     newHTTP.open("GET","http://localhost:3000/chat/messages?receiver_username=" + from_who); // open that request
     newHTTP.send(); // send the request with aditioan data
 }
-console.log(true);
-console.log(false);
 Array.from(friend_list).forEach(function(ele) {
     //console.log(ele)
     ele.addEventListener('click', function() {
