@@ -1,0 +1,4 @@
+# ignore files '* <file name>'
+*.pyc
+*.pyo
+db.sqlite3
