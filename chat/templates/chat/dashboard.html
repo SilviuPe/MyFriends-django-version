@@ -1,0 +1,67 @@
+{% extends 'chat/navigation.html' %}
+{% load static %}
+
+{% block content_page %}
+<style>
+    .welcome-text {
+        color:rgb(255, 255, 255);
+        font-size: 24;
+    }
+    #logo {
+        width: 150px;
+        height: 150px;
+        border-radius: 100%;
+    }
+    .updates {
+        margin: 0px 20%;
+        margin-top: 50px;
+    }
+    .description p {
+        text-align: start;
+        color: white;
+    }
+    .title h2 {
+        color : rgb(255, 255, 255);
+        text-align: center;
+        -webkit-text-stroke: 1px rgb(73, 255, 136);
+    }
+    .updates .image img{
+        width: 100%;
+    }
+    .author {
+        font-size: 10px;
+        color:rgb(178, 178, 178);
+    }
+</style>
+<div class = "container d-flex justify-content-center mt-5">
+        <img id = "logo" src = "{{avatar_id}}">
+</div>
+<div class = "container d-flex justify-content-center mt-5">
+    <div class = "container d-flex flex-column text-center">
+        <p class = "welcome-text"> Hello {{request.session.username}}! Welcome to our community! </p>
+        <p class = "welcome-text">There you can see our last updates!</p>
+    </div>
+</div>
+<div class = "updates">
+
+    {% for title, description, image_url, author in update_items %}
+        <div class = "container">
+            <div class = "title">
+                <h2 > {{title}} </h2>
+            </div>
+            <div class = "description mt-4">
+                <p>{{description}}</p>
+            </div>
+            <div class = "image">
+                <img src = "{{image_url}}">
+            </div>
+            <div class = "author d-flex justify-content-end mt-1">
+                <p>Posted by <span>{{author}}</span></p>
+            </div>
+        </div>
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}
