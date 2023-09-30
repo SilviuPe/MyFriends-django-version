@@ -5,7 +5,7 @@ from .models import AvatarModel
 from .forms import ChangeEmailForm, ChangePasswordForm
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
-from .models import Friendship, Message, Notification
+from .models import Friendship, Message, Notification, Update
 from django.http import JsonResponse
 
 
@@ -17,8 +17,18 @@ def dashboard(request):
     try:
         user = User.objects.get(username = request.session['username'])
         avatar_instance, create = AvatarModel.objects.get_or_create(user=user, defaults = {'avatar_id': 'url("http://localhost:3000/static/chat/empty.png")'})
-        if request.session['username']: 
-            return render(request, 'chat/chat_panel.html', context = {"avatar_id": avatar_instance.avatar_id[5:-2]})
+        
+        if request.session['username']:
+            updates = Update.objects.all()
+            update_list = list()
+            print(updates)
+            for update in updates:
+                update_list.append((update.title, update.message, update.image_or_video, update.creator.username))
+            
+            return render(request, 'chat/dashboard.html', context = {
+                "avatar_id": avatar_instance.avatar_id[5:-2],
+                "update_items": update_list
+            })
     except Exception as e:
         print(e)
         return redirect('/login')
@@ -188,10 +198,11 @@ def search(request):
     user_ = User.objects.get(username = request.session["username"])
     for user in users:
         similarity = len(query.intersection(set(user.username.lower()))) / len(query.union(set(user.username.lower())))
-        if int(similarity*100) > 0 and user != user_:
+        if int(similarity*100) > 10 and user != user_:
             friendship = Friendship.objects.filter(creator = user, following = user_)
+            friendship_reverse = Friendship.objects.filter(creator = user_, following = user)
             notification = Notification.objects.filter(user = user, user_from = user_, notification_type = "Friend Request")
-            if not friendship:
+            if not friendship and not friendship_reverse:
                 avatar = AvatarModel.objects.get(user = user)
                 user_tuple = (user.username, avatar.avatar_id[5:-2],len(notification) > 0)
                 users_match.append([user_tuple,int(similarity*100)])

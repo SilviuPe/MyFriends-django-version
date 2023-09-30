@@ -47,3 +47,12 @@ class Notification(models.Model):
     
     def __str__(self) -> str:
         return f"{self.notification_type} from {self.user_from.username}: {self.message}"
+    
+    
+class Update(models.Model):
+    creator = models.ForeignKey(User, related_name="user_creator", on_delete=models.CASCADE)
+    title = models.CharField(max_length=50,default="Update")
+    message = models.CharField(max_length=1000, default = str())
+    image_or_video = models.CharField(max_length=50, default= str())
+    id = models.AutoField(primary_key=True)
+    
