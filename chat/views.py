@@ -202,7 +202,8 @@ def search(request):
             friendship = Friendship.objects.filter(creator = user, following = user_)
             friendship_reverse = Friendship.objects.filter(creator = user_, following = user)
             notification = Notification.objects.filter(user = user, user_from = user_, notification_type = "Friend Request")
-            if not friendship and not friendship_reverse:
+            if not friendship and not friendship_reverse and not user.is_superuser:
+                print(user,user.email)
                 avatar = AvatarModel.objects.get(user = user)
                 user_tuple = (user.username, avatar.avatar_id[5:-2],len(notification) > 0)
                 users_match.append([user_tuple,int(similarity*100)])
