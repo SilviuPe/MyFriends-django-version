@@ -3,12 +3,18 @@
 {% block content_page %}
     <style>
         .description {
-            margin-top: 100px;
+            margin-top: 60px;
             color: white;
+        }
+        .description h2 {
+            text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.5);
         }
         .descriptive_words {
             font-size: 20px;
             color: white;   
+        }
+        .descriptive_words span {
+            font-weight: 500;
         }
         .video_presentation {
             width: 800px;
@@ -20,11 +26,11 @@
             Welcome to MyFriends!<br>
         </h2>
         <p class = "descriptive_words">
-            We have our application first developed in Python using KivyMD Framework <br>
-            Here you can see
+            We have our application first developed in Python using KivyMD Framework <br> <br>
+            <span>Here you can see</span>
         </p>
     </div>
-    <div class = "container d-flex justify-content-center mt-5">
+    <div class = "container d-flex justify-content-center mt-1">
      <iframe class = "video_presentation"
             src = "https://www.youtube.com/embed/YWB0vSIvgrg" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
