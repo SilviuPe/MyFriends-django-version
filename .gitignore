@@ -2,4 +2,4 @@
 *.pyc
 *.pyo
 db.sqlite3
-chat/__pycache__
+chat/__pycache__/*
