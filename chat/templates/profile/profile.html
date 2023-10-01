@@ -99,7 +99,7 @@ table {
                                         <tr>
                                             {% for img in img_list %}
                                                 <td>
-                                                    <img src = "{{ img }}" class = "avatar_image">
+                                                    <img src = "{% static 'chat/' %}{{ img }}" class = "avatar_image">
                                                 </td>
                                             {% endfor %}
                                         </tr>
