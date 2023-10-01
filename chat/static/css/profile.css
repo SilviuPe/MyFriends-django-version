@@ -1,0 +1,75 @@
+.edit-profile, .avatar-label, .username_label {
+    color: white;
+}
+.errors {
+    color: rgb(74, 19, 19);
+}
+.avatar_selector {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: gray;
+    color: white;
+    border: none;
+    opacity: 20%;
+    background-size: cover;
+}
+.avatar_selector:hover {
+    opacity: 60%;
+}
+.username_input {
+    background-color: gray;
+    border: 0px;
+    color: white;
+    border-radius: 5px;
+}
+.password_button, .email_button {
+    background-color: gray;
+    color: white;
+    opacity: 40%;
+    border: 0px;
+    border-radius: 5px;
+}
+.password_button:hover, .email_button:hover {
+    opacity: 70%;
+}
+.save_button {
+    background-color:gray;
+    color: white;
+    border: 0px;
+    border-radius: 10%;
+    font-size: 13px;
+    padding: 5px;
+}
+table {
+    width: 150px;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 5px;
+    text-align: center;
+}
+table {
+    width: 150px;
+    margin-top: 10px;
+    border-collapse: collapse;
+    display: none; /* Hide the table initially */
+    height: 0px; /* Set the initial height to 0px */
+    transition: height 0.5s; /* Add a transition for height changes */
+}
+
+.show-table {
+    display: table; /* Show the table when the class is applied */
+    height: 150px; /* Set the desired height when the class is applied */
+    transition: height 0.5s; /* Add a transition for height changes */
+}
+.button_into_image {
+    background-size: cover;
+    opacity: 90%;
+}
+.button_into_image:hover::before {
+    opacity: 70%;
+    content: "Change Avatar!";
+}

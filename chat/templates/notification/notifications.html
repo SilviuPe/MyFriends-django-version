@@ -32,32 +32,45 @@
         outline:none;
         border: none;
     }
+    .empty p {
+        color: rgb(131, 131, 131);
+        text-align: center;
+        font-weight: 500;
+        font-size: 25px;
+    }
 </style>
 <div class = "container">
     <div class = "col">
-        {% for from, type, message, seen, id in notifications_list %}
-            <div class = "row mt-2">
-                <div class = "notification {{id}}">
-                    {% if seen == true %}
-                        {% if type == "Message" %}
-                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
-                        {% elif type == "Friend Request" %}
-                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
-                            <button>accept</button>
-                            <button>decline</button>
-                        {% endif %}
-                        {% else %}
-                            {% if type == "Message" %}
-                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
-                        {% elif type == "Friend Request" %}
-                            <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
-                            <button class = "btn btn-success mb-3 mx-2">accept</button>
-                            <button class = "btn btn-danger mb-3 mx-2">decline</button>
-                        {% endif %}
-                    {% endif %}
-                </div>
+        {% if notifications_list|length == 0 %}
+            <div class = "empty mt-5">
+                <p>There are no new notifications</p>
             </div>
-        {% endfor %}
+        {% else %}
+            {% for from, type, message, seen, id in notifications_list %}
+                <div class = "row mt-2">
+                    <div class = "notification {{id}}">
+                        {% if seen == true %}
+                            {% if type == "Message" %}
+                                <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
+                            {% elif type == "Friend Request" %}
+                                <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}}</p>
+                                <button>accept</button>
+                                <button>decline</button>
+                            {% endif %}
+                            {% else %}
+                                {% if type == "Message" %}
+                                <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
+                            {% elif type == "Friend Request" %}
+                                <p><span class = "type">{{type}}</span> from <span class = "from">{{from}}</span>: {{message}} <span class = "seen">[ NEW ]</span></p>
+                                <button class = "btn btn-success mb-3 mx-2">accept</button>
+                                <button class = "btn btn-danger mb-3 mx-2">decline</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% endif %}
     </div>
 </div>
 <script src = "{% static 'js/notifications.js' %}"></script>

@@ -2,37 +2,7 @@
 {% load static %}
 
 {% block content_page %}
-<style>
-    .welcome-text {
-        color:rgb(255, 255, 255);
-        font-size: 24;
-    }
-    #logo {
-        width: 150px;
-        height: 150px;
-        border-radius: 100%;
-    }
-    .updates {
-        margin: 0px 20%;
-        margin-top: 50px;
-    }
-    .description p {
-        text-align: start;
-        color: white;
-    }
-    .title h2 {
-        color : rgb(255, 255, 255);
-        text-align: center;
-        text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.5);
-    }
-    .updates .image img{
-        width: 100%;
-    }
-    .author {
-        font-size: 10px;
-        color:rgb(178, 178, 178);
-    }
-</style>
+<link rel = "stylesheet" type = "text/css" href = "{% static 'css/dashboard.css' %}">
 <div class = "container d-flex justify-content-center mt-5">
         <img id = "logo" src = "{{avatar_id}}">
 </div>
