@@ -16,5 +16,6 @@ urlpatterns = [
     path('send_message', views.send_message, name = "New Messages"), # Message sent with AJAX
     path('friend_request', views.friend_request_accept, name = "Friendship"),
     path('search/', views.search, name = "search"),
-    path('add_friend/', views.friend_request_notification, name = "Friend Request")
+    path('add_friend/', views.friend_request_notification, name = "Friend Request"),
+    path('delete_message', views.delete_message,name = "delete message")
 ]

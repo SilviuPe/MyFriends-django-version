@@ -3,13 +3,16 @@ document.querySelector('.chat_section').style.display = 'none';
 var messages_length = 0;
 
 class Message {
-    constructor(sender,message,date) {
+    constructor(sender,message,date,id) {
         this.sender = sender;
         this.message = message;
         this.date = date;
+        this.id = id;
     }
 
     CustomMessage() {
+        this.content = document.createElement('div');
+        this.content.className = "message_container";
         this.message_element = document.createElement('p');
         this.sender_text = document.createElement('SPAN');
         this.sender_content = document.createTextNode(this.sender + ': ');
@@ -21,6 +24,8 @@ class Message {
         this.message_element.appendChild(this.sender_text);
         this.message_element.style.color = "rgb(170,170,170)";
         this.message_element.innerHTML += this.message;
+        this.message_element.style.marginTop = "10px"
+        this.message_element.style.marginLeft = "20px"
         this.br_tag = document.createElement('br')
         this.br_tag.style.display = "block";
         this.br_tag.style.marginBottom = "0em";
@@ -29,9 +34,41 @@ class Message {
         this.date_span.appendChild(document.createTextNode(this.date));
         this.date_span.style.fontSize = "7px";
         this.message_element.appendChild(this.date_span);
-        return this.message_element;
+        // Initiate button
+        this.delete_button = new CustomButton(
+            "delete",delete_message, "white", "black","40px","20px","5px","10px")
+
+        this.delete_button.InitiateButton(this.id);
+        this.content.appendChild(this.message_element);
+        this.content.appendChild(this.delete_button.button);
+        return this.content;
     }
 
+}
+
+function delete_message(id) {
+    var newHTTP = new XMLHttpRequest()
+    newHTTP.onload = function() {
+        // remove message from message_page
+    }
+    newHTTP.open('GET','http://localhost:3000/chat/delete_message?id=' + id);
+    newHTTP.send();
+}
+
+class CustomButton {
+    constructor(text,callback){  
+        this.text = text;
+        this.callback = callback;
+    }
+
+    InitiateButton(parameter) {
+        this.button = document.createElement('button');
+        this.button.textContent = this.text;
+        this.button.className = "delete_button"
+        this.button.addEventListener('click', () => {
+            this.callback(parameter);
+        });
+    }
 }
 
 function load_messages(response, updateing = false) {
@@ -46,15 +83,18 @@ function load_messages(response, updateing = false) {
         if (messages_length === response.length && updateing) return;
         else messages_length = response.length;
         var messages_list = [];
-        var messages = JSON.parse(response);
+        var senders = JSON.parse(response);
+        console.log(senders)
         message_page = document.querySelector('.message_page');
         message_page.innerHTML = "";
         // Take every data (sender,receiver,date) that needed from response to create a message element 
         // and append it to a list
-        Object.keys(messages).forEach(function(key) {
-            sender = messages[key];
-            Object.keys(sender).forEach(function(message) {
-                var paragraph = new Message(key,message,sender[message]);
+        Object.keys(senders).forEach(function(key) {
+            var messages = senders[key];
+            console.log(messages,"###",key);
+            Object.keys(messages).forEach(function(message) {
+                message_info = messages[message]
+                var paragraph = new Message(key,message,message_info['date'],message_info['id']);
                 new_message = paragraph.CustomMessage();
                 messages_list.push(paragraph);
             })
@@ -81,7 +121,7 @@ function load_messages(response, updateing = false) {
 
         // Append messages in right order to the page 
         for(let i = 0; i < messages_list.length; i++) {
-            message_page.appendChild(messages_list[i].message_element);
+            message_page.appendChild(messages_list[i].content);
         }
         message_page.scrollTop = message_page.scrollHeight;
     }

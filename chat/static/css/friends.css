@@ -63,3 +63,24 @@
 .text_area::-webkit-scrollbar-thumb:hover,.message_page::-webkit-scrollbar-thumb:hover {
     background:  rgb(48, 48, 48);
 }
+
+.delete_button {
+    background-color: rgb(97, 97, 97);
+    color: rgb(255, 255, 255);
+    width: 40px;
+    height: 20px;
+    font-size: 10px;
+    border-radius: 5px;
+    border:none;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+.message_container:hover {
+    background-color: rgb(89, 89, 89);
+}
+.message_container {
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}

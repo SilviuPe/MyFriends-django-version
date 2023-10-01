@@ -157,12 +157,19 @@ def messages(request):
     }
     for message in messages:
         conversation[sender.username].update({
-            message.message :  f"On {str(message.date)} at {str(message.time).split('.')[0]}"
+            message.message :  {
+            "date" : f"On {str(message.date)} at {str(message.time).split('.')[0]}",
+            "id" : message.id
+            }
         })
     for message in messages_from:
         conversation[receiver.username].update({
-            message.message : f"On {str(message.date)} at {str(message.time).split('.')[0]}"
+            message.message : {
+            "date" : f"On {str(message.date)} at {str(message.time).split('.')[0]}",
+            "id" : message.id
+            }
         })
+    print(conversation)
     return JsonResponse(conversation)
 
 def send_message(request):
@@ -241,3 +248,10 @@ def friend_request_notification(request):
         )
         notification.delete()
         return HttpResponse("Friend Request Deleted")
+    
+    
+    
+def delete_message(request):
+    message = Message.objects.get(id = request.GET.get('id'));
+    message.delete()
+    return HttpResponse("Message Deleted Succesfully")
