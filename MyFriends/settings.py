@@ -41,8 +41,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'register.apps.RegisterConfig',
     'chat.apps.ChatConfig',
-    'bootstrap5',
-    'channels'
+    'bootstrap5'
 ]
 
 MIDDLEWARE = [

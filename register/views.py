@@ -43,14 +43,14 @@ def login(request):
             context = {"login_form" : new_login_form}
             return render(request,'login/login.html',context=context)
         elif request.method == "POST":
-            data = request.POST 
+            data = request.POST
             email = request.POST['email']
             passwd = request.POST['password']
             try:
                 username = User.objects.get(email = email).username
                 user = authenticate(request, username = username, password = passwd)
                 print(user)
-                if user is not None:
+                if user is not None and not user.is_superuser:
                     lgn(request,user)
                     request.session['username'] = username 
                     return redirect('/chat/dashboard')
