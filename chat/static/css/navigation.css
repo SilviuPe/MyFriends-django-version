@@ -24,7 +24,7 @@ body, html {
     padding: 0;
 }
 body {
-    background-image: linear-gradient(rgb(30,30,30),rgb(80,80,80));
+    background-image: linear-gradient(rgb(30,30,30),rgb(134, 134, 134));
     background-repeat: no-repeat;
 }
 .logo {

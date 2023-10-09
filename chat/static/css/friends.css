@@ -84,3 +84,62 @@
     justify-content: space-between;
     margin-top: 5px;
 }
+.option_buttons button {
+    font-size: 60%;
+    height:  21px;
+    border:solid 1px gray;
+    border-radius: 5px;
+    color:white;
+    padding-top: 8px;
+    background-color: rgb(88, 88, 88);
+    line-height: 0px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid rgb(165, 165, 165);
+}
+
+.option_buttons input {
+    font-size: 60%;
+    display: flex;
+    justify-content: start;
+    padding: 0px;
+    color:white;
+    background-color: rgb(85, 85, 85);
+}
+.choose_file {
+    width: 100%;
+}
+.file_name {
+    text-align: center;
+    font-size: 12px;
+    color:white;
+    font-weight: 600;
+    padding-top: 2px;
+}
+.message_type_image {
+    height: 100px;
+    width: 200px;
+}
+.message_element_js {
+    font-size: 12px;
+    color: rgb(170,170,170);
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.download_file_button {
+    background-color: rgb(97, 97, 97);
+    color: rgb(167, 167, 167);
+    width: 90px;
+    height: 30px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 5px;
+    border:1px solid rgb(160, 160, 160);
+    margin-top: 10px;
+    margin-right: 20px;
+    margin-left: 10px;
+}
+.download_file_button:active {
+    background-color: rgb(65, 70, 107);
+    font-size: 8px;
+}

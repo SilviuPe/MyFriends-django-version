@@ -23,30 +23,44 @@
     line-height: 0px;
     margin-left: 70%;
 }
+.empty p {
+    color: rgb(131, 131, 131);
+    text-align: center;
+    font-weight: 500;
+    font-size: 25px;
+}
 </style>
 <div class = "container">
     <div class = "col">
-        {% for username, avatar, friend_req_sended in users_match %}
-            <div class = "row mt-2">
-                <div class = "user">
-                    <div class = "row">
-                        <div class = "col">
-                            <img class = "p-2"src = "{{ avatar }}">    
-                        </div>
-                        <div class = "col">
-                            <p>{{username}}</p>
-                        </div>
-                        <div class = "col-9 d-flex align-items-center">
-                            {% if friend_req_sended == False %}
-                                <button class = "btn btn-success addFriend {{username}}">Send Friend Request</button>
-                            {% else %}
-                                <button class = "btn btn-danger deleteFriend {{username}}">Delete Friend Request</button>
-                            {% endif %}
+        {% if users_match|length != 0%}
+            {% for username, avatar, friend_req_sended in users_match %}
+                <div class = "row mt-2">
+                    <div class = "user">
+                        <div class = "row">
+                            <div class = "col">
+                                <img class = "p-2"src = "{{ avatar }}">    
+                            </div>
+                            <div class = "col">
+                                <p>{{username}}</p>
+                            </div>
+                            <div class = "col-9 d-flex align-items-center">
+                                {% if friend_req_sended == False %}
+                                    <button class = "btn btn-success addFriend {{username}}">Send Friend Request</button>
+                                {% else %}
+                                    <button class = "btn btn-danger deleteFriend {{username}}">Delete Friend Request</button>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %} 
+                <div class = "mt-5 d-flex justify-content-center empty">
+                    <p>
+                        Nothing Found
+                    </p>
+                </div>
+        {% endif %}
     </div>
 </div>
 <script src = "{% static 'js/search.js' %}"></script>

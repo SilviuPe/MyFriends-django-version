@@ -17,5 +17,6 @@ urlpatterns = [
     path('friend_request', views.friend_request_accept, name = "Friendship"),
     path('search/', views.search, name = "search"),
     path('add_friend/', views.friend_request_notification, name = "Friend Request"),
-    path('delete_message', views.delete_message,name = "delete message")
+    path('delete_message', views.delete_message,name = "delete message"),
+    path('upload_file', views.upload_file, name = "upload file")
 ]

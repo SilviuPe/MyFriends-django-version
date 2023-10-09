@@ -27,8 +27,9 @@ class Friendship(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name = "message_sender_set", on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name="receiver_set", on_delete=models.CASCADE)
+    message_type = models.CharField(max_length=20, default= "text")
     message = models.CharField(max_length=400, default= "None")
-    time = models.TimeField(auto_now_add=True)   # default = strftime("%H:%M:%S", localtime())
+    time = models.TimeField(auto_now_add=True)  
     date = models.DateField(auto_now_add=True)
     id = models.AutoField(primary_key=True)
     

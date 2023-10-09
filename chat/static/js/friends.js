@@ -1,55 +1,116 @@
-friend_list = document.querySelectorAll('.button_friend');
+var friend_button_list = document.querySelectorAll('.button_friend');
 document.querySelector('.chat_section').style.display = 'none';
+var friend_username_list = document.querySelectorAll('.username_friend');
+var choose_file_button = document.querySelector('.choose_file');
+var input_file = document.getElementById('fileInput');
+var file_name = document.querySelector('.file_name');
+
+choose_file_button.addEventListener('click', () => {
+    input_file.click();
+});
+
+
+input_file.addEventListener('change', () => {
+    file_name.innerHTML = input_file.files.length > 0 ? input_file.files[0].name: "Choose File";
+});
+
+
 var messages_length = 0;
 
 class Message {
-    constructor(sender,message,date,id) {
+    constructor(sender,message,date,id,message_type) {
         this.sender = sender;
         this.message = message;
         this.date = date;
         this.id = id;
+        this.message_type = message_type;
     }
 
     CustomMessage() {
         this.content = document.createElement('div');
-        this.content.className = "message_container";
-        this.message_element = document.createElement('p');
-        this.sender_text = document.createElement('SPAN');
-        this.sender_content = document.createTextNode(this.sender + ': ');
-        this.sender_text.appendChild(this.sender_content);
-        this.sender_text.style.fontWeight = "bold";
-        this.sender_text.style.color = "black";
-        this.message_element.style.fontSize = "12px";
-        this.message_element.style.color = "white";
-        this.message_element.appendChild(this.sender_text);
-        this.message_element.style.color = "rgb(170,170,170)";
-        this.message_element.innerHTML += this.message;
-        this.message_element.style.marginTop = "10px"
-        this.message_element.style.marginLeft = "20px"
-        this.br_tag = document.createElement('br')
-        this.br_tag.style.display = "block";
-        this.br_tag.style.marginBottom = "0em";
-        this.message_element.appendChild(this.br_tag);
-        this.date_span = document.createElement('SPAN');
-        this.date_span.appendChild(document.createTextNode(this.date));
-        this.date_span.style.fontSize = "7px";
-        this.message_element.appendChild(this.date_span);
-        // Initiate button
-        this.delete_button = new CustomButton(
-            "delete",delete_message, "white", "black","40px","20px","5px","10px")
+        let message_element = document.createElement('p');
+        let sender_text = document.createElement('SPAN');
+        let sender_content = document.createTextNode(this.sender + ': ');
 
-        this.delete_button.InitiateButton(this.id);
-        this.content.appendChild(this.message_element);
-        this.content.appendChild(this.delete_button.button);
+        sender_text.appendChild(sender_content);
+        sender_text.style.fontWeight = "bold";
+        sender_text.style.color = "black";
+
+        message_element.className = "message_element_js"
+
+        this.content.className = "message_container";
+        message_element.appendChild(sender_text);
+
+        if (this.message_type === "text") {
+            message_element.innerHTML += this.message;
+        }
+        else {
+            let br_tag = document.createElement('br');
+            br_tag.style.display = "block";
+            br_tag.style.marginBottom = "0em";
+            message_element.appendChild(br_tag);
+
+            if (this.message_type === "image/png") {
+                
+                let image = document.createElement('img');
+                image.src = this.message;
+                image.className = "message_type_image";
+                message_element.appendChild(image)
+
+                this.content.appendChild(message_element);
+            }
+            else {
+                let file_name = this.message.split('/')[this.message.split('/').length - 1]
+                let download_file_button = document.createElement('button');
+                download_file_button.className = "download_file_button";
+                download_file_button.innerHTML = file_name + '<i style = "margin-left:6px;"class="fas fa-file-download"></i>';
+                /* let icon_button = document.createElement('i');
+                icon_button.className = "fas fa-file-download";
+                download_file_button.appendChild(icon_button); */
+
+                download_file_button.addEventListener('click', () => {
+                    fetch(this.message)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const objectURL = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = objectURL;
+                            a.download = file_name;
+                            a.textContent = 'Download File';
+                            a.click();
+                            URL.revokeObjectURL(objectURL);
+                        })
+                });
+                message_element.appendChild(download_file_button);
+            }
+
+        }
+
+        // ADD DATE AND DELETE BUTTON
+        let br_tag = document.createElement('br')
+        br_tag.style.display = "block";
+        br_tag.style.marginBottom = "0em";
+        message_element.appendChild(br_tag);
+        let date_span = document.createElement('SPAN');
+        date_span.appendChild(document.createTextNode(this.date));
+        date_span.style.fontSize = "7px";
+        message_element.appendChild(date_span);
+        // Initiate button
+        let delete_button = new CustomButton(
+            "delete",delete_message, "white", "black","40px","20px","5px","10px")
+        delete_button.InitiateButton(this.id);
+        this.content.appendChild(message_element);
+        if(this.sender === my_username)
+            this.content.appendChild(delete_button.button);
         return this.content;
     }
 
 }
 
 function delete_message(id) {
+
     var newHTTP = new XMLHttpRequest()
     newHTTP.onload = function() {
-        // remove message from message_page
     }
     newHTTP.open('GET','http://localhost:3000/chat/delete_message?id=' + id);
     newHTTP.send();
@@ -66,6 +127,7 @@ class CustomButton {
         this.button.textContent = this.text;
         this.button.className = "delete_button"
         this.button.addEventListener('click', () => {
+            this.button.style.backgroundColor = "red";
             this.callback(parameter);
         });
     }
@@ -87,6 +149,9 @@ function load_messages(response, updateing = false) {
         console.log(senders)
         message_page = document.querySelector('.message_page');
         message_page.innerHTML = "";
+        //var top_message = document.createElement('p');
+        //top_message.innerHTML = "chat with " + last_message_opened
+        //message_page.appendChild(top_message); 
         // Take every data (sender,receiver,date) that needed from response to create a message element 
         // and append it to a list
         Object.keys(senders).forEach(function(key) {
@@ -94,7 +159,7 @@ function load_messages(response, updateing = false) {
             console.log(messages,"###",key);
             Object.keys(messages).forEach(function(message) {
                 message_info = messages[message]
-                var paragraph = new Message(key,message,message_info['date'],message_info['id']);
+                var paragraph = new Message(key,message,message_info['date'],message_info['id'],message_info['type']);
                 new_message = paragraph.CustomMessage();
                 messages_list.push(paragraph);
             })
@@ -160,7 +225,7 @@ function request_messages(from_who,updateing = false) {
     newHTTP.open("GET","http://localhost:3000/chat/messages?receiver_username=" + from_who); // open that request
     newHTTP.send(); // send the request with aditioan data
 }
-Array.from(friend_list).forEach(function(ele) {
+Array.from(friend_button_list).forEach(function(ele) {
     //console.log(ele)
     ele.addEventListener('click', function() {
         chat = document.querySelector('.chat_section');
@@ -190,16 +255,31 @@ Array.from(friend_list).forEach(function(ele) {
 // requesting new message 
 const interval_for_messages = setInterval(function () {
     request_messages(last_message_opened,true);
-},1000);
+},500);
 
 
-// send new messages to users 
 text_area = document.querySelector('.text_input');
 send_message_button = document.querySelector('.send_message_button');
 message_page = document.querySelector('.message_page')
 send_message_button.addEventListener('click', function() {
     text = text_area.value;
-    if (text.replace(" ","") === "") return;
-    send_message(last_message_opened,text);
+    if (text.replace(" ","") === "" && input_file.files.length === 0) return;
+    if (text.replace(" ","") !== "")
+        send_message(last_message_opened,text);
     text_area.value = "";
+    if (input_file.files.length > 0) {
+        let input_receiver_username = document.getElementById('input_receiver_username');
+        input_receiver_username.value = last_message_opened;
+        console.log(input_receiver_username.value);
+        let FileForm = document.getElementById('FileForm');
+        var formData = new FormData(FileForm);
+        var new_http = new XMLHttpRequest();
+        console.log(formData);
+        new_http.onload = () => {
+            file_name.innerHTML = "no file";
+            input_file.value = null;
+        }
+        new_http.open('POST', 'http://localhost:3000/chat/upload_file', true);
+        new_http.send(formData);
+    }
 });

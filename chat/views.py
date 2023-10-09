@@ -12,6 +12,9 @@ from django.http import JsonResponse
 import time
 import json 
 
+IMG_EXTENSIONS = [
+    "png" , "jpeg" , "jpg"
+]
 
 def dashboard(request):
     try:
@@ -116,18 +119,19 @@ def friends(request):
     user = User.objects.get(username = request.session['username'])
     friends_list = Friendship.objects.filter(creator = user)
     friends_list_reverse = Friendship.objects.filter(following = user)
-    print(friends_list)
+    print(friends_list,friends_list_reverse)
     friend_dict = dict()
     for friend in friends_list:
         name = friend.following.username
         avatar = AvatarModel.objects.get(user = User.objects.get(username = name)).avatar_id
         friend_dict.update({name : avatar})
-    if len(friend_dict) == 0:
-        for friend in friends_list_reverse:
-            name = friend.creator.username
-            avatar = AvatarModel.objects.get(user = User.objects.get(username = name)).avatar_id
-            friend_dict.update({name : avatar})
-    return render(request, 'chat/friends.html', context = {'friend_list' : friend_dict})
+    for friend in friends_list_reverse:
+        name = friend.creator.username
+        avatar = AvatarModel.objects.get(user = User.objects.get(username = name)).avatar_id
+        friend_dict.update({name : avatar})
+    return render(request, 'chat/friends.html', context = {'friend_list' : friend_dict,
+            'my_username' : request.session.get('username')
+    })
 
 
 def notifications(request):
@@ -159,23 +163,25 @@ def messages(request):
         conversation[sender.username].update({
             message.message :  {
             "date" : f"On {str(message.date)} at {str(message.time).split('.')[0]}",
-            "id" : message.id
+            "id" : message.id,
+            "type" : message.message_type
             }
         })
     for message in messages_from:
         conversation[receiver.username].update({
             message.message : {
             "date" : f"On {str(message.date)} at {str(message.time).split('.')[0]}",
-            "id" : message.id
+            "id" : message.id,
+            "type" : message.message_type
             }
         })
-    print(conversation)
     return JsonResponse(conversation)
 
 def send_message(request):
     sender = User.objects.get(username = request.session['username'])
     receiver = User.objects.get(username = request.GET.get('receiver_username'))
     new_message = Message()
+    new_message.message_type = "text"
     new_message.sender = sender 
     new_message.receiver = receiver
     new_message.message = request.GET.get('message')
@@ -255,3 +261,27 @@ def delete_message(request):
     message = Message.objects.get(id = request.GET.get('id'));
     message.delete()
     return HttpResponse("Message Deleted Succesfully")
+
+
+def upload_file(request):
+    if request.method == "POST":
+        file = request.FILES['file']
+        # SAFETY MEANSURES
+        if len(file.name.split('.')) > 2:
+            return HttpResponse("Filed To Send The File")
+        if file.content_type.startswith('image') and file.name.split('.')[1] not in IMG_EXTENSIONS:
+            return HttpResponse("Failed To Send The File")
+        else:
+            # WRITING THE FILE IN LOCAL
+            with open(f"chat/static/downloaded_files/images/{file.name}", 'wb') as new_file:
+                for chunk in file.chunks():
+                    new_file.write(chunk)
+                new_file.close()
+        # CREATE A MESSAGE WITH THIS FILE
+        Message.objects.create(
+            sender = User.objects.get(username = request.session['username']),
+            receiver = User.objects.get(username = request.POST['username']),
+            message_type = file.content_type,
+            message = f"http://localhost:3000/static/downloaded_files/images/{file.name}"
+        )
+        return HttpResponse("File Successfully Sended!")
