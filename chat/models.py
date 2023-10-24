@@ -31,11 +31,14 @@ class Message(models.Model):
     message = models.CharField(max_length=400, default= "None")
     time = models.TimeField(auto_now_add=True)  
     date = models.DateField(auto_now_add=True)
+    seen = models.BooleanField(default = False)
     id = models.AutoField(primary_key=True)
     
     def __str__(self) -> str:
-        return f"From {self.sender.username} to {self.receiver.username}: {self.message} "
-    
+        if self.message_type == "text":
+            return f"From {self.sender.username} to {self.receiver.username}: {self.message} "
+        else:
+            return f"From {self.sender.username} to {self.receiver.username}: {self.message.split('/')}"
 
 
 class Notification(models.Model):

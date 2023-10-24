@@ -7,12 +7,23 @@
     color: white;
     border: 1px solid white;
 }
+.new_message {
+    width: 10px; /* Ajustați dimensiunea bulinei */
+    height: 10px; /* Ajustați dimensiunea bulinei */
+    margin-top: 26px;
+    margin-left:18px;
+    color: red;
+    animation: pulse 1s infinite;
+}
+
+
 .username_friend {
     text-align: center;
     color: white;
     margin-top: 10px;
     font-size: 12px;
     font-weight: 600;
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 }
 .text_input {
     background-color: rgb(85, 85, 85);
@@ -125,6 +136,9 @@
     color: rgb(170,170,170);
     margin-top: 10px;
     margin-left: 20px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    max-width: 900px;
 }
 .download_file_button {
     background-color: rgb(97, 97, 97);
@@ -142,4 +156,20 @@
 .download_file_button:active {
     background-color: rgb(65, 70, 107);
     font-size: 8px;
+}
+
+
+@keyframes pulse {
+    0% {
+      transform: scale(0.8);
+      color:rgb(0, 0, 0);
+    }
+    50% {
+      transform: scale(1.2);
+      color:red;
+    }
+    100% {
+      transform: scale(0.8);
+      color:rgb(0, 0, 0);
+    }
 }

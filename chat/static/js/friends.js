@@ -97,7 +97,7 @@ class Message {
         message_element.appendChild(date_span);
         // Initiate button
         let delete_button = new CustomButton(
-            "delete",delete_message, "white", "black","40px","20px","5px","10px")
+            "delete",delete_message, this.content);
         delete_button.InitiateButton(this.id);
         this.content.appendChild(message_element);
         if(this.sender === my_username)
@@ -107,19 +107,22 @@ class Message {
 
 }
 
-function delete_message(id) {
+function delete_message(id,message) {
 
     var newHTTP = new XMLHttpRequest()
     newHTTP.onload = function() {
     }
     newHTTP.open('GET','http://localhost:3000/chat/delete_message?id=' + id);
     newHTTP.send();
+    console.log(message);
+    message.remove();
 }
 
 class CustomButton {
-    constructor(text,callback){  
+    constructor(text,callback,message = NaN){  
         this.text = text;
         this.callback = callback;
+        this.message = message;
     }
 
     InitiateButton(parameter) {
@@ -128,7 +131,7 @@ class CustomButton {
         this.button.className = "delete_button"
         this.button.addEventListener('click', () => {
             this.button.style.backgroundColor = "red";
-            this.callback(parameter);
+            this.callback(parameter,this.message);
         });
     }
 }
@@ -143,10 +146,13 @@ function load_messages(response, updateing = false) {
 
 
         if (messages_length === response.length && updateing) return;
+        else if (messages_length > response.length) {
+            messages_length = response.length;
+            return;
+        }
         else messages_length = response.length;
         var messages_list = [];
         var senders = JSON.parse(response);
-        console.log(senders)
         message_page = document.querySelector('.message_page');
         message_page.innerHTML = "";
         //var top_message = document.createElement('p');
@@ -158,7 +164,7 @@ function load_messages(response, updateing = false) {
             var messages = senders[key];
             console.log(messages,"###",key);
             Object.keys(messages).forEach(function(message) {
-                message_info = messages[message]
+                message_info = messages[message];
                 var paragraph = new Message(key,message,message_info['date'],message_info['id'],message_info['type']);
                 new_message = paragraph.CustomMessage();
                 messages_list.push(paragraph);
@@ -232,10 +238,16 @@ Array.from(friend_button_list).forEach(function(ele) {
         message_page = document.querySelector('.message_page');
         request_messages(ele.name);
         chat_display = chat.style.display;
+
         // CASE WHEN CHAT IS NOT DISPLAYED
         if (chat_display == "none") {
             chat.style.display = "block";
             message_page.innerHTML = '';
+            let new_message_warning = ele.querySelector('.new_message');
+            console.log(new_message_warning)
+            if (new_message_warning) {
+                new_message_warning.remove();
+            }
         }
         // CASE WHEN CHAT IS DISPLAYED BUT THE CONVERSATION HAD CHANGED
         else if (last_message_opened != ele.name) {
@@ -281,5 +293,17 @@ send_message_button.addEventListener('click', function() {
         }
         new_http.open('POST', 'http://localhost:3000/chat/upload_file', true);
         new_http.send(formData);
+    }
+});
+
+text_area.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        send_message_button.click();
+        text_area.value = "";
+        //let new_text_area = text_area;
+        //let text_area_parent = text_area.parentNode;
+        //new_text_area.value -= "\n"
+        //text_area.remove();
+        //text_area_parent.appendChild(new_text_area);
     }
 });

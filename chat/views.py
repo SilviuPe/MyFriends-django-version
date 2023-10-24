@@ -11,10 +11,8 @@ from django.http import JsonResponse
 
 import time
 import json 
+import os
 
-IMG_EXTENSIONS = [
-    "png" , "jpeg" , "jpg"
-]
 
 def dashboard(request):
     try:
@@ -118,18 +116,21 @@ def change_password(request):
 def friends(request):
     user = User.objects.get(username = request.session['username'])
     friends_list = Friendship.objects.filter(creator = user)
-    friends_list_reverse = Friendship.objects.filter(following = user)
-    print(friends_list,friends_list_reverse)
-    friend_dict = dict()
+    friends_list_reverse = Friendship.objects.filter(following = user)      
+
+    friends_list_context = list()
     for friend in friends_list:
         name = friend.following.username
         avatar = AvatarModel.objects.get(user = User.objects.get(username = name)).avatar_id
-        friend_dict.update({name : avatar})
+        print(("###",name, avatar, not Message.objects.filter(sender = friend.following, seen = False, receiver = user)))
+        friends_list_context.append((name, avatar, not Message.objects.filter(sender = friend.following, seen = False, receiver = user)))
+
     for friend in friends_list_reverse:
         name = friend.creator.username
         avatar = AvatarModel.objects.get(user = User.objects.get(username = name)).avatar_id
-        friend_dict.update({name : avatar})
-    return render(request, 'chat/friends.html', context = {'friend_list' : friend_dict,
+        friends_list_context.append((name, avatar, not Message.objects.filter(sender = friend.creator, seen = False, receiver = user)))
+        print((name, avatar, not Message.objects.filter(sender = friend.creator, seen = False, receiver = user)))
+    return render(request, 'chat/friends.html', context = {'friend_list' : friends_list_context,
             'my_username' : request.session.get('username')
     })
 
@@ -168,6 +169,8 @@ def messages(request):
             }
         })
     for message in messages_from:
+        message.seen = True
+        message.save()
         conversation[receiver.username].update({
             message.message : {
             "date" : f"On {str(message.date)} at {str(message.time).split('.')[0]}",
@@ -204,6 +207,7 @@ def friend_request_accept(request):
     return HttpResponse("Friend Request Declined")
 
 
+
 def search(request):
     query = set(request.GET.get('s').lower())
     users = User.objects.all()
@@ -233,6 +237,8 @@ def search(request):
     })
     
     
+
+# Create a notification tagged with "Friend Request" or delete an existent friend request
 def friend_request_notification(request):
     if request.GET.get('friend_request_sent') == "true":
         user = User.objects.get(username = request.GET.get('username'))
@@ -258,7 +264,7 @@ def friend_request_notification(request):
     
     
 def delete_message(request):
-    message = Message.objects.get(id = request.GET.get('id'));
+    message = Message.objects.get(id = request.GET.get('id'))
     message.delete()
     return HttpResponse("Message Deleted Succesfully")
 
@@ -266,14 +272,11 @@ def delete_message(request):
 def upload_file(request):
     if request.method == "POST":
         file = request.FILES['file']
-        # SAFETY MEANSURES
-        if len(file.name.split('.')) > 2:
-            return HttpResponse("Filed To Send The File")
-        if file.content_type.startswith('image') and file.name.split('.')[1] not in IMG_EXTENSIONS:
-            return HttpResponse("Failed To Send The File")
+        if not check_file_(file):
+            return HttpResponse(f"Failed To Send The File '{file.name}'")
         else:
             # WRITING THE FILE IN LOCAL
-            with open(f"chat/static/downloaded_files/images/{file.name}", 'wb') as new_file:
+            with open(f"chat/static/downloaded_files/{file.content_type}/{file.name}", 'wb') as new_file:
                 for chunk in file.chunks():
                     new_file.write(chunk)
                 new_file.close()
@@ -282,6 +285,38 @@ def upload_file(request):
             sender = User.objects.get(username = request.session['username']),
             receiver = User.objects.get(username = request.POST['username']),
             message_type = file.content_type,
-            message = f"http://localhost:3000/static/downloaded_files/images/{file.name}"
+            message = f"http://localhost:3000/static/downloaded_files/{file.content_type}/{file.name}"
         )
         return HttpResponse("File Successfully Sended!")
+
+
+
+############################333
+
+# NONVIEWS FUNCTIONS 
+
+
+# Availabel extensions for images
+IMG_EXTENSIONS = [
+    "png" , "jpeg" , "jpg"
+]
+
+# Extenstions that are not allowed to be send over the post method 
+BLOCKED_EXTENSIONS = [
+    "exe" , "py" 
+]
+
+
+def check_file_(file):  # SAFETY MEANSURES 
+    print(file.content_type)
+    for extension in BLOCKED_EXTENSIONS:
+        if file.name.endswith(extension) or file.name.endswith(extension.upper()):
+            print("Blocked extension")
+            return False 
+    if file.content_type.startswith('image'):
+        if len(file.name.split('.')) > 2:
+            return False 
+        if file.name.split('.')[1].lower() not in IMG_EXTENSIONS:
+            return False
+    os.system(f'mkdir "chat/static/downloaded_files/{file.content_type}"')
+    return True

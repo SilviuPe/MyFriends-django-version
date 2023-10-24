@@ -1,0 +1,53 @@
+y_profit = 0
+for i in range(12):
+    items_sold = input(f"Month {i+1}. Items sold: ")
+    price_for_item = input("Price for item: ")
+    print("Monthly profit = ", int(items_sold)*int(price_for_item))
+    y_profit += int(items_sold)*int(price_for_item)
+
+print("Year profit: ", y_profit)
+
+
+"""
+OUTPUT:
+
+Month 1. Items sold: 10
+Price for item: 6
+Monthly profit =  60
+Month 2. Items sold: 5
+Price for item: 34
+Monthly profit =  170
+Month 3. Items sold: 6
+Price for item: 30
+Monthly profit =  180
+Month 4. Items sold: 20
+Price for item: 20
+Monthly profit =  400
+Month 5. Items sold: 56
+Price for item: 34
+Monthly profit =  1904
+Month 6. Items sold: 12
+Price for item: 60
+Monthly profit =  720
+Month 7. Items sold: 10
+Price for item: 10
+Monthly profit =  100
+Month 8. Items sold: 22
+Price for item: 31
+Monthly profit =  682
+Month 9. Items sold: 90
+Price for item: 2
+Monthly profit =  180
+Month 10. Items sold: 23
+Price for item: 12
+Monthly profit =  276
+Month 11. Items sold: 11
+Price for item: 15
+Monthly profit =  165
+Month 12. Items sold: 23
+Price for item: 34
+Monthly profit =  782
+Year profit:  5619
+
+
+"""

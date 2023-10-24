@@ -1,0 +1,53 @@
+n = input("Enter number: ")
+pos_n = 0
+neg_n = 0
+while int(n):
+    if int(n) > 0:
+        pos_n += 1
+    else:
+        neg_n += 1
+    print("Positive numbers: ", pos_n)
+    print("Negative numbers:", neg_n)
+    n = input("Enter number: ")
+
+
+
+"""
+OUTPUT:
+
+
+Enter number: 23
+Positive numbers:  1
+Negative numbers: 0
+Enter number: -23
+Positive numbers:  1
+Negative numbers: 1
+Enter number: 12
+Positive numbers:  2
+Negative numbers: 1
+Enter number: 1
+Positive numbers:  3
+Negative numbers: 1
+Enter number: 1
+Positive numbers:  4
+Negative numbers: 1
+Enter number: 1
+Positive numbers:  5
+Negative numbers: 1
+Enter number: 23
+Positive numbers:  6
+Negative numbers: 1
+Enter number: 43
+Positive numbers:  7
+Negative numbers: 1
+Enter number: -45
+Positive numbers:  7
+Negative numbers: 2
+Enter number: -34
+Positive numbers:  7
+Negative numbers: 3
+Enter number: 0
+
+
+
+"""

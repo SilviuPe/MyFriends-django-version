@@ -6,10 +6,14 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/friends.css' %}" >
 <div class = "friends_list continer">
     <div class="row friends_images">
-        {% for friend , avatar_url in friend_list.items %}
+        {% for friend , avatar_url, seen in friend_list %}
         <div class="col d-flex justify-content-center">
             <div class = "row d-flex justify-content-center mt-3">
-                <button class = "button_friend" style = "background-image: {{avatar_url}}" name = "{{friend}}"></button>
+                <button class = "button_friend" style = "background-image: {{avatar_url}}" name = "{{friend}}">
+                    {% if seen == False %}
+                        <i class = "new_message fa fa-exclamation"></i>
+                    {% endif %}
+                </button>
                 <p class = "username_friend">{{friend}}</p>
             </div>
         </div>
